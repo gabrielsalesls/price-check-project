@@ -1,0 +1,16 @@
+meta {
+  name: Main - Get All Products
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8081/api/products/microfone-blue-yeti-usb
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
