@@ -1,0 +1,17 @@
+server:
+  port : 8081
+spring:
+  application: providerA
+  h2:
+    console.enabled: true
+  datasource:
+    url: jdbc:h2:mem:products
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
