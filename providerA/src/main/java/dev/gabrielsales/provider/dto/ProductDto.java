@@ -1,4 +1,6 @@
 package dev.gabrielsales.provider.dto;
 
-public record ProductDto(Long id, String name, String value, boolean available) {
+import java.math.BigDecimal;
+
+public record ProductDto(Long id, String name, String slug, BigDecimal value, boolean available) {
 }

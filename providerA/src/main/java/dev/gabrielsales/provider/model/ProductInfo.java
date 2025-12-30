@@ -2,6 +2,11 @@ package dev.gabrielsales.provider.model;
 
 import dev.gabrielsales.provider.dto.ProductDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+import java.math.BigDecimal;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -13,18 +18,26 @@ public class ProductInfo {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @NotBlank
     private String name;
 
-    private String price;
+    @NotBlank
+    @Column(unique = true)
+    private String slug;
+
+    @NotNull
+    @Positive
+    private BigDecimal price;
 
     private Boolean available;
 
     public ProductInfo() {
     }
 
-    public ProductInfo(Long id, String name, String price, Boolean available) {
+    public ProductInfo(Long id, String name, String slug, BigDecimal price, Boolean available) {
         this.id = id;
         this.name = name;
+        this.slug = slug;
         this.price = price;
         this.available = available;
     }
@@ -45,11 +58,19 @@ public class ProductInfo {
         this.name = name;
     }
 
-    public String getPrice() {
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -62,6 +83,6 @@ public class ProductInfo {
     }
 
     public ProductDto toDto() {
-        return new ProductDto(this.id, this.name, this.price, this.available);
+        return new ProductDto(this.id, this.name, this.slug, this.price, this.available);
     }
 }

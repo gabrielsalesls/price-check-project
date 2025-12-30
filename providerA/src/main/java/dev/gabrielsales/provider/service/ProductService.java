@@ -1,6 +1,7 @@
 package dev.gabrielsales.provider.service;
 
 import dev.gabrielsales.provider.dto.ProductDto;
+import dev.gabrielsales.provider.exception.ProductNotFoundException;
 import dev.gabrielsales.provider.model.ProductInfo;
 import dev.gabrielsales.provider.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,11 @@ public class ProductService {
 
     }
 
-    public ProductDto getProductByName(String name) {
+    public ProductDto getByProductSlug(String slug) {
 
-        var productData = repository.findByProductName(name);
-
-        return productData.getFirst().toDto();
+        return repository.findBySlug(slug)
+                .map(ProductInfo::toDto)
+                .orElseThrow(() -> new ProductNotFoundException("Produto não encontrado: " + slug));
     }
 
 }

@@ -1,15 +1,16 @@
 meta {
-  name: Get All products from Provider A 
+  name: Get All products from Provider A
   type: http
   seq: 1
 }
 
 get {
-  url: 
+  url: http://localhost:8081/api/products
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
