@@ -1,13 +1,13 @@
 package dev.gabrielsales.pricecheck.client;
 
-import dev.gabrielsales.pricecheck.dto.ProductResponse;
+import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
 
 import java.util.List;
 
 public interface ProductProviderClient {
 
-    List<ProductResponse> getAllProducts();
+    List<ProviderProductResponse> getAllProducts();
 
-    ProductResponse getProductBySlug(String slug);
+    ProviderProductResponse getProductBySlug(String slug);
 
 }

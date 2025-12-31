@@ -1,6 +1,6 @@
 package dev.gabrielsales.pricecheck.controller;
 
-import dev.gabrielsales.pricecheck.dto.ProductResponse;
+import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
 import dev.gabrielsales.pricecheck.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+    public ResponseEntity<List<ProviderProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 

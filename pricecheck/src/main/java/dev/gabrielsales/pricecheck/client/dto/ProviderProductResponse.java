@@ -1,8 +1,8 @@
-package dev.gabrielsales.pricecheck.dto;
+package dev.gabrielsales.pricecheck.client.dto;
 
 import java.math.BigDecimal;
 
-public record ProductResponse(
+public record ProviderProductResponse(
         Long id,
         String name,
         String slug,

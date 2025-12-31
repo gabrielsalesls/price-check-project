@@ -1,7 +1,7 @@
 package dev.gabrielsales.pricecheck.service;
 
 import dev.gabrielsales.pricecheck.client.ProductProviderClient;
-import dev.gabrielsales.pricecheck.dto.ProductResponse;
+import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class ProductService {
         this.clients = clients;
     }
 
-    public List<ProductResponse> getAllProducts() {
+    public List<ProviderProductResponse> getAllProducts() {
 
         return clients.stream()
                 .flatMap(client -> client.getAllProducts().stream())

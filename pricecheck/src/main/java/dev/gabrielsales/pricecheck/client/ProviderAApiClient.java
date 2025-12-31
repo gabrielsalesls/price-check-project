@@ -1,6 +1,6 @@
 package dev.gabrielsales.pricecheck.client;
 
-import dev.gabrielsales.pricecheck.dto.ProductResponse;
+import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
 
@@ -15,19 +15,19 @@ public class ProviderAApiClient implements ProductProviderClient {
     }
 
     @Override
-    public List<ProductResponse> getAllProducts() {
+    public List<ProviderProductResponse> getAllProducts() {
 
         return this.restClient.get()
                 .uri("/")
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ProductResponse>>() {});
+                .body(new ParameterizedTypeReference<List<ProviderProductResponse>>() {});
     }
 
     @Override
-    public ProductResponse getProductBySlug(String slug) {
+    public ProviderProductResponse getProductBySlug(String slug) {
         return this.restClient.get()
                 .uri("/{slug}", slug)
                 .retrieve()
-                .body(new ParameterizedTypeReference<ProductResponse>() {});
+                .body(new ParameterizedTypeReference<ProviderProductResponse>() {});
     }
 }
