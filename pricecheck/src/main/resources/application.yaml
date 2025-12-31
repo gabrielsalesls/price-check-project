@@ -3,3 +3,5 @@ spring:
     name: pricecheck
 provider-a:
   url: http://localhost:8081/api/products
+provider-b:
+  url: http://localhost:8082/api/products
