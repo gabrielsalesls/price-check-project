@@ -6,7 +6,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
-public class ProviderAApiClient {
+public class ProviderAApiClient implements ProductProviderClient {
 
     private final RestClient restClient;
 
@@ -14,11 +14,20 @@ public class ProviderAApiClient {
         this.restClient = restClient;
     }
 
+    @Override
     public List<ProductResponse> getAllProducts() {
 
         return this.restClient.get()
                 .uri("/")
                 .retrieve()
                 .body(new ParameterizedTypeReference<List<ProductResponse>>() {});
+    }
+
+    @Override
+    public ProductResponse getProductBySlug(String slug) {
+        return this.restClient.get()
+                .uri("/{slug}", slug)
+                .retrieve()
+                .body(new ParameterizedTypeReference<ProductResponse>() {});
     }
 }

@@ -1,7 +1,7 @@
 package dev.gabrielsales.pricecheck.controller;
 
-import dev.gabrielsales.pricecheck.client.ProviderAApiClient;
 import dev.gabrielsales.pricecheck.dto.ProductResponse;
+import dev.gabrielsales.pricecheck.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +13,19 @@ import java.util.List;
 @RequestMapping("/api/v1/product")
 public class ProductController {
 
-    private final ProviderAApiClient providerAApiClient;
+    private final ProductService productService;
 
-    public ProductController(ProviderAApiClient providerAApiClient) {
-        this.providerAApiClient = providerAApiClient;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        return ResponseEntity.ok(providerAApiClient.getAllProducts());
+        return ResponseEntity.ok(productService.getAllProducts());
     }
+
+/*    @GetMapping("/{slug}")
+    public ResponseEntity<PriceCheckResponse> getBestPriceByProductSlug(@PathVariable String slug){
+
+    }*/
 }
