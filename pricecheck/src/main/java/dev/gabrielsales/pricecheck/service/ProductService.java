@@ -5,7 +5,9 @@ import dev.gabrielsales.pricecheck.dto.ProductDto;
 import dev.gabrielsales.pricecheck.dto.ProviderDto;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -18,8 +20,17 @@ public class ProductService {
 
     public List<ProductDto> getAllProducts() {
 
-        var providersProductsList = clients.stream()
-                .flatMap(client -> client.getAllProducts().stream())
+        var activeProviders = clients.stream().filter(ProductProviderClient::isProviderActive).toList();
+
+        var providersProductsList = activeProviders.stream()
+                .flatMap(client -> {
+                    try {
+                        return client.getAllProducts().stream();
+                    } catch (Exception e) {
+                        //Error
+                        return Stream.empty();
+                    }
+                })
                 .toList();
 
         return providersProductsList.stream().map(product -> {

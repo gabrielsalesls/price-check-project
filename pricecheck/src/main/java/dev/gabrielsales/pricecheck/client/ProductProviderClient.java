@@ -10,4 +10,6 @@ public interface ProductProviderClient {
 
     ProviderProductResponse getProductBySlug(String slug);
 
+    boolean isProviderActive();
+
 }

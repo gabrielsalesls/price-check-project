@@ -2,6 +2,8 @@ spring:
   application:
     name: pricecheck
 provider-a:
+  active: true
   url: http://localhost:8081/api/products
 provider-b:
+  active: true
   url: http://localhost:8082/api/products

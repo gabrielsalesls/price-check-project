@@ -2,12 +2,16 @@ package dev.gabrielsales.pricecheck.client.impl;
 
 import dev.gabrielsales.pricecheck.client.ProductProviderClient;
 import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 public class ProviderAApiClient implements ProductProviderClient {
+
+    @Value("${provider-a.active:false}")
+    private boolean isProviderActive;
 
     private final RestClient restClient;
 
@@ -30,5 +34,10 @@ public class ProviderAApiClient implements ProductProviderClient {
                 .uri("/{slug}", slug)
                 .retrieve()
                 .body(new ParameterizedTypeReference<ProviderProductResponse>() {});
+    }
+
+    @Override
+    public boolean isProviderActive() {
+        return isProviderActive;
     }
 }

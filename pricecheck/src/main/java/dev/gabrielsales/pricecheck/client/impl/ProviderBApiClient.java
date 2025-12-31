@@ -1,14 +1,17 @@
-/*
 package dev.gabrielsales.pricecheck.client.impl;
 
 import dev.gabrielsales.pricecheck.client.ProductProviderClient;
 import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 public class ProviderBApiClient implements ProductProviderClient {
+
+    @Value("${provider-b.active:false}")
+    private boolean isProviderActive;
 
     private final RestClient restClient;
 
@@ -32,5 +35,9 @@ public class ProviderBApiClient implements ProductProviderClient {
                 .retrieve()
                 .body(new ParameterizedTypeReference<ProviderProductResponse>() {});
     }
+
+    @Override
+    public boolean isProviderActive() {
+        return isProviderActive;
+    }
 }
-*/
