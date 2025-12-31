@@ -1,5 +1,7 @@
-package dev.gabrielsales.pricecheck.client;
+/*
+package dev.gabrielsales.pricecheck.client.impl;
 
+import dev.gabrielsales.pricecheck.client.ProductProviderClient;
 import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
@@ -31,3 +33,4 @@ public class ProviderBApiClient implements ProductProviderClient {
                 .body(new ParameterizedTypeReference<ProviderProductResponse>() {});
     }
 }
+*/
