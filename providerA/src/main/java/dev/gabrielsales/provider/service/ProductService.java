@@ -27,7 +27,7 @@ public class ProductService {
         var productResponse = productsData.stream()
                 .map(product -> {
 
-                    var purchaseUrl = URI.create(String.format("http://localhost:8081/api/products/%s/%s", product.getSlug(), product.getId()));
+                    var purchaseUrl = URI.create(String.format("http://localhost:8081/api/provider-a/products/%s/%s", product.getSlug(), product.getId()));
 
                     return new ProductDto(product.getId(), "provider_a", product.getName(), product.getSlug(), product.getPrice(), product.getAvailable(), purchaseUrl);
                 });

@@ -1,6 +1,5 @@
 package dev.gabrielsales.provider.model;
 
-import dev.gabrielsales.provider.dto.ProductDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -82,7 +81,4 @@ public class ProductInfo {
         this.available = available;
     }
 
-    public ProductDto toDto() {
-        return new ProductDto(this.id, this.name, this.slug, this.price, this.available);
-    }
 }

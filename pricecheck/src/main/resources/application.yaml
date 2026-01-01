@@ -3,7 +3,7 @@ spring:
     name: pricecheck
 provider-a:
   active: true
-  url: http://localhost:8081/api/products
+  url: http://localhost:8081/api/provider-a/products/
 provider-b:
   active: true
-  url: http://localhost:8082/api/products
+  url: http://localhost:8082/api/provider-b/products/

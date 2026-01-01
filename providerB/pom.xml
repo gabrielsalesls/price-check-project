@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.gabrielsales</groupId>
-	<artifactId>providerB</artifactId>
+	<artifactId>providerA</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>providerB</name>
+	<name>providerA</name>
 	<description>Price Check API </description>
 	<url/>
 	<licenses>
