@@ -8,18 +8,15 @@ import dev.gabrielsales.pricecheck.dto.ProductPriceComparasionDto;
 import dev.gabrielsales.pricecheck.dto.ProductSummaryDto;
 import dev.gabrielsales.pricecheck.exception.ProductNotFoundException;
 import dev.gabrielsales.pricecheck.mapper.ProductMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class ProductService {
-
-    private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private final List<ProductProviderClient> clients;
 
@@ -33,9 +30,19 @@ public class ProductService {
 
         var providersProductsList = fetchAllProductsFromProviders(activeProviders);
 
-        return providersProductsList
-                .stream().map(ProductMapper::getProductDataDto)
-                .toList();
+        var groupedProductsBySlug = providersProductsList.stream()
+                .filter(ProviderProductResponse::available)
+                .collect(Collectors.groupingBy(ProviderProductResponse::slug));
+
+        var bestOfferPerProduct = groupedProductsBySlug.values().stream()
+                .map(producto -> {
+                    var bestOfferByProduct = producto.stream()
+                            .min(Comparator.comparing(ProviderProductResponse::value))
+                            .orElseThrow();
+                    return ProductMapper.getProductDataDto(bestOfferByProduct);
+                });
+
+        return bestOfferPerProduct.toList();
     }
 
     public ProductPriceComparasionDto getBestPriceBySlug(String slug) {
@@ -48,6 +55,7 @@ public class ProductService {
         }
 
         ProviderProductResponse bestOfferResponse = allOffers.stream()
+                .filter(ProviderProductResponse::available)
                 .min(Comparator.comparing(ProviderProductResponse::value))
                 .orElseThrow();
 
@@ -58,7 +66,7 @@ public class ProductService {
                 .map(ProductMapper::convertToProductOfferDto)
                 .toList();
 
-        ProductSummaryDto productSummary = new ProductSummaryDto(bestOffer.name());
+        ProductSummaryDto productSummary = new ProductSummaryDto(bestOffer.name(), slug);
 
         return new ProductPriceComparasionDto(productSummary, bestOffer, alternativeOffers);
 

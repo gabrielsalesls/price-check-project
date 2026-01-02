@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<ProductPriceComparasionDto> getBestPriceByProductSlug(@PathVariable String slug){
+    public ResponseEntity<ProductPriceComparasionDto> getBestPriceByProductSlug(@PathVariable String slug) {
         return ResponseEntity.ok(productService.getBestPriceBySlug(slug));
     }
 }

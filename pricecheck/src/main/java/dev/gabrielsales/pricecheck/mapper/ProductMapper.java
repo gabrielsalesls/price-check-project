@@ -10,12 +10,12 @@ public final class ProductMapper {
     private ProductMapper() {}
 
     public static ProductDataDto getProductDataDto(ProviderProductResponse product) {
-        var providerDto = new ProviderDto(product.providerName(), product.id(), product.purchaseUrl());
-        return new ProductDataDto(product.productName(), product.slug(), product.value(), product.available(), providerDto);
+        var providerDto = new ProviderDto(product.providerName(), product.value(), product.id(), product.purchaseUrl());
+        return new ProductDataDto(product.productName(), product.slug(), providerDto);
     }
 
     public static ProductOfferDTO convertToProductOfferDto(ProviderProductResponse product) {
-        var providerDto = new ProviderDto(product.providerName(), product.id(), product.purchaseUrl());
-        return new ProductOfferDTO(product.value(), product.available(), providerDto, product.productName());
+        var providerDto = new ProviderDto(product.providerName(), product.value(), product.id(), product.purchaseUrl());
+        return new ProductOfferDTO(providerDto, product.productName());
     }
 }

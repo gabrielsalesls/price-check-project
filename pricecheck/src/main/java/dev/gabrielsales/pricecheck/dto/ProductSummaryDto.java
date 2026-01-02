@@ -1,4 +1,4 @@
 package dev.gabrielsales.pricecheck.dto;
 
-public record ProductSummaryDto(String name) {
+public record ProductSummaryDto(String name, String slug) {
 }
