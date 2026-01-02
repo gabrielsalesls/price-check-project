@@ -1,12 +1,13 @@
 package dev.gabrielsales.pricecheck.service;
 
 import dev.gabrielsales.pricecheck.client.ProductProviderClient;
-import dev.gabrielsales.pricecheck.dto.ProductDto;
-import dev.gabrielsales.pricecheck.dto.ProviderDto;
+import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
+import dev.gabrielsales.pricecheck.dto.*;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -18,7 +19,7 @@ public class ProductService {
         this.clients = clients;
     }
 
-    public List<ProductDto> getAllProducts() {
+    public List<ProductDataDto> getAllProducts() {
 
         var activeProviders = clients.stream().filter(ProductProviderClient::isProviderActive).toList();
 
@@ -35,17 +36,35 @@ public class ProductService {
 
         return providersProductsList.stream().map(product -> {
             var providerDto = new ProviderDto(product.providerName(), product.id(), product.purchaseUrl());
-            return new ProductDto(product.productName(), product.slug(), product.value(), product.available(), providerDto);
+            return new ProductDataDto(product.productName(), product.slug(), product.value(), product.available(), providerDto);
         }).toList();
 
     }
 
-/*    public PriceCheckResponse getBestPriceBySlug(String slug) {
-        var response = providerAApiClient.getProductBySlug(slug);
+    public ProductPriceDataDto getBestPriceBySlug(String slug) {
+        var activeProviders = clients.stream().filter(ProductProviderClient::isProviderActive).toList();
 
-        var bestPrice =
+        var productInfoByProvider = activeProviders.stream()
+                .flatMap(client -> client.getProductBySlug(slug).stream())
+                .sorted(Comparator.comparing(ProviderProductResponse::value))
+                .map(product -> {
+                    var providerDto = new ProviderDto(product.providerName(), product.id(), product.purchaseUrl());
+                    return new ProductOfferDTO(product.value(), product.available(), providerDto, product.productName());
+                })
+                .toList();
 
-        return new PriceCheckResponse(response.name(), response.slug(), )
-    }*/
+        Optional<ProductOfferDTO> produtoMaisBarato = productInfoByProvider.isEmpty()
+                ? Optional.empty()
+                : Optional.of(productInfoByProvider.get(0));
+
+        List<ProductOfferDTO> listaSemMaisBarato = productInfoByProvider.stream()
+                .skip(1)
+                .toList();
+
+        var productSummaryDto = new ProductSummaryDto(produtoMaisBarato.get().name());
+
+        return new ProductPriceDataDto(productSummaryDto, produtoMaisBarato.get(), listaSemMaisBarato);
+
+    }
 
 }

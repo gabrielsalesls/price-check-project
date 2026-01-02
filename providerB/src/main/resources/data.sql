@@ -58,9 +58,9 @@ INSERT INTO product_info (name, slug, price, available) VALUES ('Luminária LED 
 INSERT INTO product_info (name, slug, price, available) VALUES ('Organizador de Cabos 10 Peças', 'organizador-de-cabos-10-pecas', 29.90, true);
 
 -- Mesmos produtos do provider A
-INSERT INTO product_info (name, slug, price, available) VALUES ('Headset HyperX Cloud II', 'headset-hyperx-cloud-ii', 549.00, true);
-INSERT INTO product_info (name, slug, price, available) VALUES ('SSD Samsung 980 Pro 1TB', 'ssd-samsung-980-pro-1tb', 820.00, true);
-INSERT INTO product_info (name, slug, price, available) VALUES ('Cadeira Gamer Noblechairs Hero', 'cadeira-gamer-noblechairs-hero', 2890.00, true);
+INSERT INTO product_info (name, slug, price, available) VALUES ('Headset HyperX Cloud II', 'headset-hyperx-cloud-ii', 300.00, true);
+INSERT INTO product_info (name, slug, price, available) VALUES ('SSD Samsung 980 Pro 1TB', 'ssd-samsung-980-pro-1tb', 920.00, true);
+INSERT INTO product_info (name, slug, price, available) VALUES ('Cadeira Gamer Noblechairs Hero', 'cadeira-gamer-noblechairs-hero', 2890.50, true);
 INSERT INTO product_info (name, slug, price, available) VALUES ('Placa de Vídeo RTX 4070 Ti', 'placa-de-video-rtx-4070-ti', 5600.00, false);
 INSERT INTO product_info (name, slug, price, available) VALUES ('Microfone Blue Yeti USB', 'microfone-blue-yeti-usb', 950.00, true);
 INSERT INTO product_info (name, slug, price, available) VALUES ('Kindle Paperwhite 16GB', 'kindle-paperwhite-16gb', 799.00, true);

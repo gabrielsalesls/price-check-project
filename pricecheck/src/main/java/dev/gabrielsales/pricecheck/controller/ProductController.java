@@ -1,9 +1,11 @@
 package dev.gabrielsales.pricecheck.controller;
 
-import dev.gabrielsales.pricecheck.dto.ProductDto;
+import dev.gabrielsales.pricecheck.dto.ProductDataDto;
+import dev.gabrielsales.pricecheck.dto.ProductPriceDataDto;
 import dev.gabrielsales.pricecheck.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,12 +22,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
+    public ResponseEntity<List<ProductDataDto>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
-/*    @GetMapping("/{slug}")
-    public ResponseEntity<ProductDto> getBestPriceByProductSlug(@PathVariable String slug){
-
-    }*/
+    @GetMapping("/{slug}")
+    public ResponseEntity<ProductPriceDataDto> getBestPriceByProductSlug(@PathVariable String slug){
+        return ResponseEntity.ok(productService.getBestPriceBySlug(slug));
+    }
 }
