@@ -45,7 +45,7 @@ public class ProductService {
         }
 
         var product = productData.get();
-        var purchaseUrl = URI.create(String.format("http://localhost:8081/api/products/%s/%s", product.getSlug(), product.getId()));
+        var purchaseUrl = URI.create(String.format("http://localhost:8082/api/provider-b/products/%s/%s", product.getSlug(), product.getId()));
 
         return new ProductDto(product.getId(), "provider_b", product.getName(), product.getSlug(), product.getPrice(), product.getAvailable(), purchaseUrl);
 

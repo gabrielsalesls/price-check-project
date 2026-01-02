@@ -2,16 +2,24 @@ package dev.gabrielsales.pricecheck.service;
 
 import dev.gabrielsales.pricecheck.client.ProductProviderClient;
 import dev.gabrielsales.pricecheck.client.dto.ProviderProductResponse;
-import dev.gabrielsales.pricecheck.dto.*;
+import dev.gabrielsales.pricecheck.dto.ProductDataDto;
+import dev.gabrielsales.pricecheck.dto.ProductOfferDTO;
+import dev.gabrielsales.pricecheck.dto.ProductPriceComparasionDto;
+import dev.gabrielsales.pricecheck.dto.ProductSummaryDto;
+import dev.gabrielsales.pricecheck.exception.ProductNotFoundException;
+import dev.gabrielsales.pricecheck.mapper.ProductMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
 public class ProductService {
+
+    private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private final List<ProductProviderClient> clients;
 
@@ -21,9 +29,59 @@ public class ProductService {
 
     public List<ProductDataDto> getAllProducts() {
 
-        var activeProviders = clients.stream().filter(ProductProviderClient::isProviderActive).toList();
+        var activeProviders = getActiveProviders();
 
-        var providersProductsList = activeProviders.stream()
+        var providersProductsList = fetchAllProductsFromProviders(activeProviders);
+
+        return providersProductsList
+                .stream().map(ProductMapper::getProductDataDto)
+                .toList();
+    }
+
+    public ProductPriceComparasionDto getBestPriceBySlug(String slug) {
+        var activeProviders = getActiveProviders();
+
+        List<ProviderProductResponse> allOffers = getProviderProductResponses(slug, activeProviders);
+
+        if (allOffers.isEmpty()) {
+            throw new ProductNotFoundException("Nenhuma oferta encontrada para o produto: " + slug);
+        }
+
+        ProviderProductResponse bestOfferResponse = allOffers.stream()
+                .min(Comparator.comparing(ProviderProductResponse::value))
+                .orElseThrow();
+
+        ProductOfferDTO bestOffer = ProductMapper.convertToProductOfferDto(bestOfferResponse);
+
+        List<ProductOfferDTO> alternativeOffers = allOffers.stream()
+                .filter(offer -> offer != bestOfferResponse)
+                .map(ProductMapper::convertToProductOfferDto)
+                .toList();
+
+        ProductSummaryDto productSummary = new ProductSummaryDto(bestOffer.name());
+
+        return new ProductPriceComparasionDto(productSummary, bestOffer, alternativeOffers);
+
+    }
+
+    private static List<ProviderProductResponse> getProviderProductResponses(String slug, List<ProductProviderClient> activeProviders) {
+        return activeProviders.stream()
+                .flatMap(client -> {
+                    try {
+                        return client.getProductBySlug(slug).stream();
+                    } catch (Exception e) {
+                        return Stream.empty();
+                    }
+                })
+                .toList();
+    }
+
+    private List<ProductProviderClient> getActiveProviders() {
+        return clients.stream().filter(ProductProviderClient::isProviderActive).toList();
+    }
+
+    private List<ProviderProductResponse> fetchAllProductsFromProviders(List<ProductProviderClient> activeProviders) {
+        return activeProviders.stream()
                 .flatMap(client -> {
                     try {
                         return client.getAllProducts().stream();
@@ -33,38 +91,5 @@ public class ProductService {
                     }
                 })
                 .toList();
-
-        return providersProductsList.stream().map(product -> {
-            var providerDto = new ProviderDto(product.providerName(), product.id(), product.purchaseUrl());
-            return new ProductDataDto(product.productName(), product.slug(), product.value(), product.available(), providerDto);
-        }).toList();
-
     }
-
-    public ProductPriceDataDto getBestPriceBySlug(String slug) {
-        var activeProviders = clients.stream().filter(ProductProviderClient::isProviderActive).toList();
-
-        var productInfoByProvider = activeProviders.stream()
-                .flatMap(client -> client.getProductBySlug(slug).stream())
-                .sorted(Comparator.comparing(ProviderProductResponse::value))
-                .map(product -> {
-                    var providerDto = new ProviderDto(product.providerName(), product.id(), product.purchaseUrl());
-                    return new ProductOfferDTO(product.value(), product.available(), providerDto, product.productName());
-                })
-                .toList();
-
-        Optional<ProductOfferDTO> produtoMaisBarato = productInfoByProvider.isEmpty()
-                ? Optional.empty()
-                : Optional.of(productInfoByProvider.get(0));
-
-        List<ProductOfferDTO> listaSemMaisBarato = productInfoByProvider.stream()
-                .skip(1)
-                .toList();
-
-        var productSummaryDto = new ProductSummaryDto(produtoMaisBarato.get().name());
-
-        return new ProductPriceDataDto(productSummaryDto, produtoMaisBarato.get(), listaSemMaisBarato);
-
-    }
-
 }

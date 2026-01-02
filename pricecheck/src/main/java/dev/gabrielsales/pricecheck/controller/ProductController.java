@@ -1,7 +1,7 @@
 package dev.gabrielsales.pricecheck.controller;
 
 import dev.gabrielsales.pricecheck.dto.ProductDataDto;
-import dev.gabrielsales.pricecheck.dto.ProductPriceDataDto;
+import dev.gabrielsales.pricecheck.dto.ProductPriceComparasionDto;
 import dev.gabrielsales.pricecheck.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<ProductPriceDataDto> getBestPriceByProductSlug(@PathVariable String slug){
+    public ResponseEntity<ProductPriceComparasionDto> getBestPriceByProductSlug(@PathVariable String slug){
         return ResponseEntity.ok(productService.getBestPriceBySlug(slug));
     }
 }
